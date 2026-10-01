@@ -831,7 +831,16 @@ entities:
 
 ### Charging state indicators
 
-If your device provides charging state you can configure it in the following way:
+When `charging_state` is not configured the card looks for the charging state among the other entities of the battery's device (it requires `extend_entity_data` to be enabled, which is the default). The first available source is used:
+
+1. State sensor named after the battery one, e.g. `sensor.phone_battery_state` for `sensor.phone_battery_level` (Home Assistant Companion app). States `charging` and `full` (case-insensitive) mean charging
+2. `binary_sensor` with `device_class: battery_charging` (e.g. Sonos, Roborock)
+3. `enum` sensor which can report charging, e.g. Matter battery charge state. States `charging`, `full` and `full_charge` mean charging
+4. `binary_sensor` with `device_class: plug`
+
+Entities which are `unavailable` or `unknown` are skipped.
+
+If your device provides charging state in a different way you can configure it in the following way:
 
 ![image](https://user-images.githubusercontent.com/8268674/80610521-5e661380-8a31-11ea-9c71-75e11c2ec009.png)
 
